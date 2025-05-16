@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perly's Terminal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="terminal-button close"></span>
+                <span class="terminal-button minimize"></span>
+                <span class="terminal-button maximize"></span>
+            </div>
+            <div class="terminal-title">Perly@kali:~$</div>
+        </div>
+        <div class="terminal-content">
+            <div class="line">
+                <span class="prompt">visitor@kali:~$</span>
+                <span class="input-cursor-container"><span class="input" id="current-input"></span><span class="cursor"></span></span>
+            </div>
+        </div>
+    </div>
+    <div class="matrix-overlay" id="matrixOverlay"></div>
+    <div class="access-granted" id="accessGranted">ACCESS GRANTED</div>
+    <script src="script.js"></script>
+</body>
+</html> 
