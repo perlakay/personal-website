@@ -6,7 +6,7 @@
 }
 
 body {
-    background: url('kali-layers.png') no-repeat center center fixed;
+    background: url('kali.png') no-repeat center center fixed;
     background-size: cover;
     height: 100vh;
     width: 100vw;
@@ -14,18 +14,6 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(10, 20, 40, 0.55);
-    backdrop-filter: blur(2px);
-    z-index: 0;
 }
 
 .terminal {
@@ -44,6 +32,11 @@ body::before {
     z-index: 1;
     display: flex;
     flex-direction: column;
+    transition: opacity 0.3s ease;
+}
+
+.terminal.hidden {
+    display: none;
 }
 
 .terminal-header {
@@ -254,4 +247,206 @@ body::before {
     text-shadow: 0 0 10px #a5f503;
     z-index: 1001;
     display: none;
+}
+
+.desktop-icon {
+    position: fixed;
+    width: 64px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#terminal-icon {
+    left: 20px;
+    top: 20px;
+}
+
+#files-icon {
+    left: 20px;
+    top: 120px;
+}
+
+.terminal-icon-css {
+    width: 48px;
+    height: 48px;
+    background: #111;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto 5px auto;
+}
+.terminal-arrow {
+    color: #fff;
+    font-size: 32px;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-weight: bold;
+    position: absolute;
+    left: 10px;
+    top: 7px;
+    line-height: 1;
+}
+.terminal-dash {
+    color: #fff;
+    font-size: 28px;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-weight: bold;
+    position: absolute;
+    left: 24px;
+    top: 18px;
+    line-height: 1;
+}
+
+.files-img-icon {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 5px auto;
+}
+
+.desktop-icon span {
+    color: white;
+    font-size: 12px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.file-manager {
+    position: fixed;
+    top: 80px;
+    left: 100px;
+    width: 400px;
+    height: 320px;
+    background: #f5f6fa;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #b3d1f7;
+}
+.file-manager.hidden {
+    display: none;
+}
+.file-manager-header {
+    background: #e3eaf6;
+    padding: 10px 16px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #b3d1f7;
+}
+.file-manager-title {
+    font-weight: bold;
+    color: #357ab7;
+    font-size: 16px;
+}
+.file-manager-close {
+    font-size: 22px;
+    color: #357ab7;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.file-manager-content {
+    flex: 1;
+    padding: 18px 24px;
+    overflow-y: auto;
+}
+.file-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.file-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px 0 10px 4px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #222;
+    border-radius: 4px;
+    transition: background 0.15s;
+    gap: 6px;
+}
+.file-list li:hover {
+    background: #dbe7fa;
+}
+.file-icon {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+}
+.file-icon.folder {
+    background: linear-gradient(135deg, #4a90e2 60%, #357ab7 100%);
+    border-radius: 4px 4px 3px 3px;
+    position: relative;
+    border: 1.5px solid #357ab7;
+}
+.file-icon.folder::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    width: 14px;
+    height: 5px;
+    background: #b3d1f7;
+    border-radius: 2px 2px 1px 1px;
+}
+.file-icon.file {
+    background: #fff;
+    border: 1.5px solid #b3d1f7;
+    border-radius: 3px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.file-icon.file::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    width: 10px;
+    height: 2px;
+    background: #b3d1f7;
+    border-radius: 1px;
+}
+
+.file-manager-nav {
+    display: flex;
+    align-items: center;
+    background: #e3eaf6;
+    border-bottom: 1px solid #b3d1f7;
+    padding: 6px 16px;
+    font-size: 14px;
+}
+.file-manager-back {
+    background: #dbe7fa;
+    border: none;
+    color: #357ab7;
+    font-size: 18px;
+    border-radius: 4px;
+    margin-right: 12px;
+    padding: 2px 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.file-manager-back:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+.file-manager-path {
+    color: #357ab7;
+    font-weight: 500;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+}
+
+.files-img-icon {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 5px auto;
 } 

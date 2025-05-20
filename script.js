@@ -3,15 +3,109 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentInput = document.getElementById('current-input');
     const matrixOverlay = document.getElementById('matrixOverlay');
     const accessGranted = document.getElementById('accessGranted');
+    const terminalWindow = document.getElementById('terminal-window');
+    const terminalIcon = document.getElementById('terminal-icon');
+    const closeButton = document.getElementById('close-terminal');
     let commandHistory = [];
     let historyIndex = -1;
     const terminalPrompt = 'visitor@kali:~$';
+    let isFirstOpen = true;
+
+    // --- File Manager Logic ---
+    const filesIcon = document.getElementById('files-icon');
+    const fileManagerWindow = document.getElementById('file-manager-window');
+    const closeFileManager = document.getElementById('close-file-manager');
+    const fileManagerContent = document.getElementById('file-manager-content');
+    const fileManagerBack = document.getElementById('file-manager-back');
+    const fileManagerPath = document.getElementById('file-manager-path');
+
+    // Example file structure
+    const fileStructure = {
+        root: [
+            { type: 'folder', name: 'Documents', contents: [
+                { type: 'file', name: 'resume.pdf', content: 'This is a fake resume preview.' },
+                { type: 'file', name: 'coverletter.txt', content: 'This is a fake cover letter.' }
+            ] },
+            { type: 'folder', name: 'Pictures', contents: [
+                { type: 'file', name: 'selfie.png', content: 'Pretend this is a picture.' }
+            ] },
+            { type: 'file', name: 'notes.txt', content: 'These are some notes.' },
+            { type: 'file', name: 'todo.md', content: 'TODO:\n- Make a cool website\n- Hack the planet' }
+        ]
+    };
+
+    let currentFolder = fileStructure.root;
+    let folderStack = [];
+
+    // Helper to get current path as string
+    function getCurrentPath() {
+        let path = ['Home'];
+        for (const folder of folderStack) {
+            if (folder.name) path.push(folder.name);
+        }
+        if (folderStack.length && folderStack[folderStack.length-1].name !== undefined) {
+            if (currentFolder !== fileStructure.root) {
+                // Find current folder name
+                const last = folderStack[folderStack.length-1];
+                if (last && last.name) path.push(last.name);
+            }
+        }
+        return path.join(' > ');
+    }
+
+    function renderFileList(folder) {
+        // Update path and back button
+        fileManagerPath.textContent = getCurrentPath();
+        fileManagerBack.disabled = folderStack.length === 0;
+
+        let html = '<ul class="file-list">';
+        folder.forEach((item, idx) => {
+            html += `<li data-idx="${idx}" data-type="${item.type}"><span class="file-icon ${item.type}"></span>${item.name}</li>`;
+        });
+        html += '</ul>';
+        fileManagerContent.innerHTML = html;
+    }
+
+    function showFilePreview(file) {
+        fileManagerPath.textContent = getCurrentPath() + ' > ' + file.name;
+        fileManagerBack.disabled = false;
+        fileManagerContent.innerHTML = `<div style="padding:16px;"><b>${file.name}</b><pre style="margin-top:10px;">${file.content}</pre><button id="back-to-folder" style="margin-top:16px;">Back</button></div>`;
+        document.getElementById('back-to-folder').onclick = () => {
+            if (folderStack.length > 0) {
+                const prev = folderStack.pop();
+                currentFolder = prev.contents || fileStructure.root;
+                renderFileList(currentFolder);
+            } else {
+                renderFileList(fileStructure.root);
+            }
+        };
+    }
+
+    // Function to show welcome message
+    function showWelcomeMessage() {
+        addOutput('Hi, I\'m Perly! Type --info for a list of commands.');
+    }
 
     // Initial welcome message
-    addOutput('Hi, I\'m Perly! Type --info for a list of commands.');
+    showWelcomeMessage();
+
+    // Handle terminal icon double-click
+    terminalIcon.addEventListener('dblclick', () => {
+        terminalWindow.classList.remove('hidden');
+        if (isFirstOpen) {
+            isFirstOpen = false;
+        }
+    });
+
+    // Handle close button click
+    closeButton.addEventListener('click', () => {
+        terminalWindow.classList.add('hidden');
+    });
 
     // Handle keyboard input
     document.addEventListener('keydown', (e) => {
+        if (terminalWindow.classList.contains('hidden')) return;
+        
         if (e.key === 'Enter') {
             const command = currentInput.textContent.trim();
             if (command) {
@@ -170,4 +264,42 @@ X: x.com/_shark_byte
         outputs.forEach(output => output.remove());
         addOutput("Hi, I'm Perly! Type --info for a list of commands.");
     }
+
+    // Double-click Files icon to open file manager
+    filesIcon.addEventListener('dblclick', () => {
+        fileManagerWindow.classList.remove('hidden');
+        renderFileList(currentFolder);
+    });
+
+    // Close file manager
+    closeFileManager.addEventListener('click', () => {
+        fileManagerWindow.classList.add('hidden');
+        // Reset to root on close
+        currentFolder = fileStructure.root;
+        folderStack = [];
+    });
+
+    // Back button logic
+    fileManagerBack.addEventListener('click', () => {
+        if (folderStack.length > 0) {
+            const prev = folderStack.pop();
+            currentFolder = prev.contents || fileStructure.root;
+            renderFileList(currentFolder);
+        }
+    });
+
+    // Update: when opening a folder, push its info to folderStack
+    fileManagerContent.addEventListener('dblclick', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+        const idx = li.getAttribute('data-idx');
+        const type = li.getAttribute('data-type');
+        if (type === 'folder') {
+            folderStack.push({ name: currentFolder[idx].name, contents: currentFolder });
+            currentFolder = currentFolder[idx].contents;
+            renderFileList(currentFolder);
+        } else if (type === 'file') {
+            showFilePreview(currentFolder[idx]);
+        }
+    });
 }); 

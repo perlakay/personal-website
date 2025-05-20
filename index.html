@@ -7,10 +7,21 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="terminal">
+    <div class="desktop-icon" id="terminal-icon">
+        <div class="terminal-icon-css">
+            <span class="terminal-arrow">&gt;</span>
+            <span class="terminal-dash">-</span>
+        </div>
+        <span>Terminal</span>
+    </div>
+    <div class="desktop-icon" id="files-icon">
+        <img src="penguin.png" alt="File Icon" class="files-img-icon" width="48" height="48">
+        <span>Files</span>
+    </div>
+    <div class="terminal" id="terminal-window">
         <div class="terminal-header">
             <div class="terminal-buttons">
-                <span class="terminal-button close"></span>
+                <span class="terminal-button close" id="close-terminal"></span>
                 <span class="terminal-button minimize"></span>
                 <span class="terminal-button maximize"></span>
             </div>
@@ -21,6 +32,19 @@
                 <span class="prompt">visitor@kali:~$</span>
                 <span class="input-cursor-container"><span class="input" id="current-input"></span><span class="cursor"></span></span>
             </div>
+        </div>
+    </div>
+    <div class="file-manager hidden" id="file-manager-window">
+        <div class="file-manager-header">
+            <div class="file-manager-title">Files</div>
+            <span class="file-manager-close" id="close-file-manager">×</span>
+        </div>
+        <div class="file-manager-nav" id="file-manager-nav">
+            <button class="file-manager-back" id="file-manager-back" title="Back">&#8592;</button>
+            <span class="file-manager-path" id="file-manager-path">Home</span>
+        </div>
+        <div class="file-manager-content" id="file-manager-content">
+            <!-- File/folder list will go here -->
         </div>
     </div>
     <div class="matrix-overlay" id="matrixOverlay"></div>
